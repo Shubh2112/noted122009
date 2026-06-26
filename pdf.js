@@ -77,20 +77,18 @@ const saveStatus         = $("saveStatus");
 // ==========================================
 
 async function init() {
-  showPickerScreen();
 
-  const stored = sessionStorage.getItem("notedPDF");
-  if (stored) {
-    try {
-      const binary = atob(stored);
-      const bytes  = new Uint8Array(binary.length);
-      for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-      await loadPDF(bytes.buffer);
-      return;
-    } catch (_) {
-      sessionStorage.removeItem("notedPDF");
-    }
+  loadingScreen.style.display = "flex";
+
+  const response = await fetch("The_physchology_of_money.pdf");
+
+  if (!response.ok) {
+    throw new Error("PDF not found");
   }
+
+  const buffer = await response.arrayBuffer();
+
+  await loadPDF(buffer);
 }
 
 function showPickerScreen() {
