@@ -1,0 +1,33 @@
+body {
+  font-family: Arial;
+  text-align: center;
+  background: #0f0f0f;
+  color: white;
+  margin-top: 100px;
+}
+
+input {
+  padding: 10px;
+  margin: 10px;
+  border-radius: 5px;
+  border: none;
+}
+
+button {
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  border: none;
+  background: #4CAF50;
+  color: white;
+}
+
+#country {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+#msg {
+  margin-top: 20px;
+}
+
