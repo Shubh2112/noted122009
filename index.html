@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Noted · Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="page">
+  <div class="card">
+
+    <!-- Brand -->
+    <div class="brand">
+      <div class="brand-icon">📋</div>
+      <h1>Noted</h1>
+      <p>Secure PDF workspace</p>
+    </div>
+
+    <!-- Server indicator -->
+    <div class="server-tag">
+      <div class="server-dot"></div>
+      <span id="country">Connecting…</span>
+    </div>
+
+    <!-- Password field -->
+    <div class="field">
+      <label>Access Password</label>
+      <div class="input-wrap">
+        <input
+          id="pass"
+          type="password"
+          placeholder="Enter password"
+          autocomplete="off"
+          spellcheck="false"
+        >
+      </div>
+    </div>
+
+    <button class="btn-login" onclick="login()">Unlock →</button>
+
+    <p id="msg"></p>
+
+    <div class="hint">
+      Password format: &nbsp;<code>POSSIBLE HHMM</code><br>
+      Use the current time in the server's timezone
+    </div>
+
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
