@@ -1,736 +1,160 @@
-/* ==========================================
-   NOTED — PDF VIEWER
-   Dark glass · Electric indigo · Neon cyan
-========================================== */
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
-/* ==========================================
-   TOKENS
-========================================== */
-
-:root {
-  --bg:          #0a0b0f;
-  --surface:     #111218;
-  --panel:       rgba(255,255,255,0.055);
-  --border:      rgba(255,255,255,0.09);
-  --border-glow: rgba(99,102,241,0.45);
-
-  --indigo:      #6366f1;
-  --indigo-dim:  rgba(99,102,241,0.18);
-  --cyan:        #22d3ee;
-  --cyan-dim:    rgba(34,211,238,0.15);
-
-  --text:        #e2e8f0;
-  --text-muted:  #64748b;
-  --text-dim:    #94a3b8;
-
-  --radius-sm:   8px;
-  --radius-md:   12px;
-  --radius-lg:   16px;
-
-  --toolbar-h:   58px;
-  --sidebar-w:   220px;
-
-  --shadow-glow: 0 0 28px rgba(99,102,241,0.22);
-}
-
-/* ==========================================
-   RESET
-========================================== */
-
-*, *::before, *::after {
-  margin: 0; padding: 0;
-  box-sizing: border-box;
-}
-
-html, body {
-  width: 100%; height: 100%;
-  overflow: hidden;
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
-  font-size: 14px;
-  -webkit-font-smoothing: antialiased;
-}
-
-/* ==========================================
-   TOOLBAR
-========================================== */
-
-.topbar {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%;
-  height: var(--toolbar-h);
-  z-index: 999;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 0 16px;
-
-  background: rgba(10,11,15,0.88);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
-  box-shadow: 0 1px 0 rgba(255,255,255,0.04),
-              0 4px 24px rgba(0,0,0,0.5);
-}
-
-/* Brand mark in toolbar */
-.topbar::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0;
-  width: 3px;
-  height: 100%;
-  background: linear-gradient(180deg, var(--indigo), var(--cyan));
-  border-radius: 0 2px 2px 0;
-}
-
-/* ==========================================
-   TOOLBAR BUTTONS
-========================================== */
-
-.topbar button,
-.toolbarButtons button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-
-  height: 36px;
-  min-width: 36px;
-  padding: 0 12px;
-
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  color: var(--text-dim);
-
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 500;
-
-  cursor: pointer;
-  transition: background 0.18s, border-color 0.18s,
-              color 0.18s, box-shadow 0.18s, transform 0.12s;
-  white-space: nowrap;
-}
-
-.topbar button:hover,
-.toolbarButtons button:hover {
-  background: rgba(255,255,255,0.1);
-  border-color: rgba(255,255,255,0.18);
-  color: var(--text);
-  transform: translateY(-1px);
-}
-
-.topbar button:active,
-.toolbarButtons button:active {
-  transform: translateY(0);
-}
-
-.topbar button:disabled,
-.toolbarButtons button:disabled {
-  opacity: 0.32;
-  cursor: not-allowed;
-  transform: none;
-}
-
-/* Active tool state */
-.toolbarButtons button.active-tool {
-  background: var(--indigo-dim);
-  border-color: var(--indigo);
-  color: #a5b4fc;
-  box-shadow: var(--shadow-glow);
-}
-
-#toggleSidebar {
-  font-size: 16px;
-  background: transparent;
-  border-color: transparent;
-}
-#toggleSidebar:hover {
-  background: var(--panel);
-  border-color: var(--border);
-}
-
-/* ==========================================
-   PAGE INFO & ZOOM
-========================================== */
-
-.pageInfo {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  color: var(--text-muted);
-  font-size: 13px;
-}
-
-#currentPage {
-  width: 54px;
-  height: 34px;
-  text-align: center;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  color: var(--text);
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 600;
-  outline: none;
-  transition: border-color 0.18s, box-shadow 0.18s;
-}
-#currentPage:focus {
-  border-color: var(--indigo);
-  box-shadow: 0 0 0 3px var(--indigo-dim);
-}
-
-#totalPages {
-  font-weight: 600;
-  color: var(--text-dim);
-}
-
-.zoomBox {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-#zoomPercent {
-  min-width: 48px;
-  text-align: center;
-  font-weight: 600;
-  font-size: 13px;
-  color: var(--text-dim);
-}
-
-.toolbarButtons {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-/* SHA button */
-#shaBtn {
-  background: linear-gradient(135deg, rgba(34,211,238,0.15), rgba(99,102,241,0.15));
-  border-color: rgba(34,211,238,0.3);
-  color: var(--cyan);
-  font-weight: 600;
-  letter-spacing: 0.5px;
-}
-#shaBtn:hover {
-  background: linear-gradient(135deg, rgba(34,211,238,0.25), rgba(99,102,241,0.25));
-  border-color: var(--cyan);
-  color: #67e8f9;
-}
-
-/* ==========================================
-   WORKSPACE
-========================================== */
-
-.workspace {
-  display: flex;
-  width: 100%;
-  height: calc(100vh - var(--toolbar-h));
-  margin-top: var(--toolbar-h);
-}
-
-/* ==========================================
-   SIDEBAR
-========================================== */
-
-#sidebar {
-  width: var(--sidebar-w);
-  flex-shrink: 0;
-  height: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
-
-  background: rgba(10,11,15,0.9);
-  border-right: 1px solid var(--border);
-
-  display: flex;
-  flex-direction: column;
-
-  transition: width 0.28s cubic-bezier(0.4,0,0.2,1),
-              opacity 0.22s ease;
-}
-
-#sidebar.collapsed {
-  width: 0;
-  opacity: 0;
-  pointer-events: none;
-}
-
-.sidebarHeader {
-  position: sticky;
-  top: 0;
-  z-index: 5;
-  padding: 14px 16px 12px;
-  background: rgba(10,11,15,0.95);
-  border-bottom: 1px solid var(--border);
-  backdrop-filter: blur(10px);
-}
-
-.sidebarHeader h3 {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 1.2px;
-  text-transform: uppercase;
-  color: var(--text-muted);
-}
-
-#thumbnailContainer {
-  padding: 14px 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-/* ==========================================
-   THUMBNAILS
-========================================== */
-
-.thumbnail {
-  position: relative;
-  border-radius: var(--radius-sm);
-  overflow: hidden;
-  border: 2px solid transparent;
-  cursor: pointer;
-  transition: border-color 0.18s, transform 0.18s, box-shadow 0.18s;
-  background: #1a1b22;
-}
-
-.thumbnail:hover {
-  border-color: rgba(99,102,241,0.5);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.5);
-}
-
-.thumbnail.active {
-  border-color: var(--indigo);
-  box-shadow: 0 0 16px rgba(99,102,241,0.4);
-}
-
-.thumbnail canvas {
-  display: block;
-  width: 100%;
-  height: auto;
-  border-radius: 4px;
-}
-
-.thumb-label {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  text-align: center;
-  padding: 4px 0;
-  font-size: 10px;
-  font-weight: 600;
-  color: var(--text-muted);
-  background: linear-gradient(transparent, rgba(10,11,15,0.85));
-}
-
-/* ==========================================
-   SIDEBAR SCROLLBAR
-========================================== */
-
-#sidebar::-webkit-scrollbar { width: 5px; }
-#sidebar::-webkit-scrollbar-track { background: transparent; }
-#sidebar::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.1);
-  border-radius: 99px;
-}
-#sidebar::-webkit-scrollbar-thumb:hover {
-  background: rgba(255,255,255,0.2);
-}
-
-/* ==========================================
-   PDF VIEWER
-========================================== */
-
-#viewerContainer {
-  flex: 1;
-  overflow: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 32px 24px;
-  background:
-    radial-gradient(ellipse 70% 50% at 50% 0%, rgba(99,102,241,0.05) 0%, transparent 70%),
-    var(--bg);
-  gap: 0;
-}
-
-#viewerContainer::-webkit-scrollbar { width: 8px; }
-#viewerContainer::-webkit-scrollbar-track { background: transparent; }
-#viewerContainer::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.1);
-  border-radius: 99px;
-}
-
-#pdfViewer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 24px;
-  width: 100%;
-}
-
-/* Page wrappers set by JS */
-.pageWrapper {
-  border-radius: 10px !important;
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,0.07),
-    0 20px 60px rgba(0,0,0,0.6),
-    0 0 40px rgba(99,102,241,0.08) !important;
-  transition: box-shadow 0.3s;
-}
-.pageWrapper:hover {
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,0.1),
-    0 24px 70px rgba(0,0,0,0.65),
-    0 0 50px rgba(99,102,241,0.14) !important;
-}
-
-/* ==========================================
-   POPUPS (shared)
-========================================== */
-
-.popup {
-  position: fixed;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  width: 340px;
-  max-width: 92vw;
-
-  background: rgba(18,19,26,0.97);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,0.04),
-    0 24px 60px rgba(0,0,0,0.7),
-    var(--shadow-glow);
-  overflow: hidden;
-  z-index: 2000;
-
-  animation: popIn 0.2s cubic-bezier(0.34,1.56,0.64,1);
-}
-
-@keyframes popIn {
-  from { opacity: 0; transform: translate(-50%,-48%) scale(0.94); }
-  to   { opacity: 1; transform: translate(-50%,-50%) scale(1); }
-}
-
-.popupHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 18px;
-  border-bottom: 1px solid var(--border);
-  background: rgba(255,255,255,0.03);
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: "Segoe UI", sans-serif;
 }
 
-.popupHeader h3 {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text);
-  letter-spacing: 0.1px;
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+    background:#0f172a;
 }
 
-.popupHeader button {
-  background: transparent;
-  border: none;
-  color: var(--text-muted);
-  font-size: 18px;
-  cursor: pointer;
-  width: 28px; height: 28px;
-  border-radius: 6px;
-  display: flex; align-items: center; justify-content: center;
-  transition: background 0.15s, color 0.15s;
-}
-.popupHeader button:hover {
-  background: rgba(255,255,255,0.08);
-  color: var(--text);
+.bg-animation{
+    position:fixed;
+    inset:0;
+    background:
+    radial-gradient(circle at 20% 20%, #3b82f6 0%, transparent 30%),
+    radial-gradient(circle at 80% 30%, #06b6d4 0%, transparent 30%),
+    radial-gradient(circle at 50% 80%, #8b5cf6 0%, transparent 30%);
+    filter:blur(100px);
+    animation:moveBg 10s infinite alternate ease-in-out;
 }
 
-.popupBody {
-  padding: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+.container{
+    position:relative;
+    z-index:2;
 }
 
-.popupBody input[type="text"] {
-  width: 100%;
-  padding: 11px 14px;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  color: var(--text);
-  font-family: inherit;
-  font-size: 14px;
-  outline: none;
-  transition: border-color 0.18s, box-shadow 0.18s;
-}
-.popupBody input[type="text"]:focus {
-  border-color: var(--indigo);
-  box-shadow: 0 0 0 3px var(--indigo-dim);
-}
-.popupBody input[type="text"]::placeholder {
-  color: var(--text-muted);
-}
+.card{
+    width:360px;
+    padding:35px;
+    text-align:center;
 
-.popupBody button {
-  padding: 11px;
-  background: linear-gradient(135deg, var(--indigo), #818cf8);
-  border: none;
-  border-radius: var(--radius-sm);
-  color: #fff;
-  font-family: inherit;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: opacity 0.18s, transform 0.12s;
-}
-.popupBody button:hover {
-  opacity: 0.88;
-  transform: translateY(-1px);
-}
+    background:rgba(255,255,255,0.08);
+    backdrop-filter:blur(15px);
 
-.popupBody hr {
-  border: none;
-  border-top: 1px solid var(--border);
-}
+    border:1px solid rgba(255,255,255,0.15);
 
-/* ==========================================
-   EDIT POPUP — TOOL GRID
-========================================== */
+    border-radius:25px;
 
-.toolGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
+    box-shadow:
+    0 20px 50px rgba(0,0,0,.4);
 
-.toolBtn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 12px !important;
-  background: var(--panel) !important;
-  border: 1px solid var(--border) !important;
-  border-radius: var(--radius-sm) !important;
-  color: var(--text-dim) !important;
-  font-size: 13px !important;
-  font-weight: 500 !important;
-  cursor: pointer;
-  transition: background 0.16s, border-color 0.16s,
-              color 0.16s, transform 0.12s !important;
-}
-.toolBtn:hover {
-  background: rgba(255,255,255,0.09) !important;
-  border-color: rgba(255,255,255,0.18) !important;
-  color: var(--text) !important;
-  transform: translateY(-1px) !important;
+    animation:fadeIn .8s ease;
 }
-.toolBtn:active { transform: translateY(0) !important; }
 
-.hl-dot {
-  width: 12px; height: 12px;
-  border-radius: 3px;
-  flex-shrink: 0;
+.pdf-icon{
+    font-size:70px;
+    margin-bottom:15px;
+    animation:float 3s infinite ease-in-out;
 }
 
-/* Draw & Text span full width */
-.toolBtn.full {
-  grid-column: 1 / -1;
+.badge{
+    display:inline-block;
+    padding:6px 14px;
+    border-radius:50px;
+    background:rgba(255,255,255,0.12);
+    color:white;
+    font-size:13px;
+    margin-bottom:15px;
 }
 
-/* ==========================================
-   SHA POPUP
-========================================== */
-
-#hashResult {
-  font-family: 'SF Mono', 'Fira Code', monospace;
-  font-size: 11.5px;
-  word-break: break-all;
-  color: var(--cyan);
-  background: rgba(34,211,238,0.07);
-  border: 1px solid rgba(34,211,238,0.15);
-  border-radius: var(--radius-sm);
-  padding: 10px 12px;
-  min-height: 38px;
-  line-height: 1.6;
-  transition: opacity 0.2s;
+h1{
+    color:white;
+    font-size:24px;
+    margin-bottom:15px;
 }
-
-/* ==========================================
-   OVERLAY BACKDROP
-========================================== */
 
-#overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.55);
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
-  z-index: 1500;
-  animation: fadeIn 0.18s ease;
+p{
+    color:#d1d5db;
+    line-height:1.6;
+    margin-bottom:20px;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+#pdfLink{
+    display:block;
+    color:#60a5fa;
+    margin-bottom:25px;
+    text-decoration:none;
+    word-break:break-word;
 }
 
-/* ==========================================
-   SAVE STATUS TOAST
-========================================== */
-
-#saveStatus {
-  position: fixed;
-  bottom: 24px; right: 24px;
-  background: rgba(18,19,26,0.95);
-  border: 1px solid rgba(34,211,238,0.3);
-  color: var(--cyan);
-  padding: 11px 20px;
-  border-radius: var(--radius-md);
-  font-size: 13px;
-  font-weight: 600;
-  z-index: 2500;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.5),
-              0 0 20px rgba(34,211,238,0.15);
-  animation: slideUp 0.22s cubic-bezier(0.34,1.3,0.64,1);
+#pdfLink:hover{
+    text-decoration:underline;
 }
 
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
+button{
+    border:none;
+    cursor:pointer;
 
-/* ==========================================
-   LOADING SCREEN
-========================================== */
+    padding:14px 35px;
 
-#loadingScreen {
-  position: fixed;
-  inset: 0;
-  background: var(--bg);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 24px;
-  z-index: 3000;
-}
+    border-radius:50px;
 
-.loader-ring {
-  width: 48px; height: 48px;
-  border: 3px solid rgba(255,255,255,0.06);
-  border-top-color: var(--indigo);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
+    color:white;
+    font-size:16px;
+    font-weight:600;
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
+    background:
+    linear-gradient(
+        135deg,
+        #3b82f6,
+        #06b6d4
+    );
 
-.loader-text {
-  font-size: 15px;
-  font-weight: 500;
-  color: var(--text-muted);
-  letter-spacing: 0.3px;
+    transition:.3s;
 }
 
-.loader {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
+button:hover{
+    transform:translateY(-3px) scale(1.05);
 }
 
-.file-pick-zone {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  text-align: center;
+button:active{
+    transform:scale(.95);
 }
 
-.file-pick-zone p {
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--text);
-  letter-spacing: -0.3px;
+@keyframes float{
+    0%,100%{
+        transform:translateY(0);
+    }
+    50%{
+        transform:translateY(-10px);
+    }
 }
 
-.file-pick-zone small {
-  color: var(--text-muted);
-  font-size: 13px;
+@keyframes fadeIn{
+    from{
+        opacity:0;
+        transform:translateY(40px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
 }
 
-.pick-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 13px 28px;
-  background: linear-gradient(135deg, var(--indigo), #818cf8);
-  border-radius: var(--radius-md);
-  color: #fff;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: opacity 0.18s, transform 0.14s;
-  box-shadow: 0 8px 24px rgba(99,102,241,0.4);
-}
-.pick-btn:hover {
-  opacity: 0.88;
-  transform: translateY(-2px);
-  box-shadow: 0 12px 32px rgba(99,102,241,0.5);
+@keyframes moveBg{
+    from{
+        transform:scale(1);
+    }
+    to{
+        transform:scale(1.2);
+    }
 }
 
-/* ==========================================
-   HIDDEN
-========================================== */
+@media(max-width:450px){
 
-.hidden { display: none !important; }
-
-/* ==========================================
-   MOBILE
-========================================== */
-
-@media (max-width: 900px) {
-  :root { --sidebar-w: 170px; }
-
-  .toolbarButtons { gap: 4px; }
-  .topbar { padding: 0 10px; }
-  .topbar button { min-width: 32px; padding: 0 9px; font-size: 12px; }
-  #zoomPercent { display: none; }
-}
+    .card{
+        width:90vw;
+        padding:28px;
+    }
 
-@media (max-width: 650px) {
-  #sidebar {
-    position: fixed;
-    left: calc(-1 * var(--sidebar-w));
-    top: var(--toolbar-h);
-    height: calc(100vh - var(--toolbar-h));
-    z-index: 1200;
-    transition: left 0.28s cubic-bezier(0.4,0,0.2,1);
-  }
-  #sidebar.show {
-    left: 0;
-  }
-  #sidebar.collapsed {
-    left: calc(-1 * var(--sidebar-w));
-    width: var(--sidebar-w);
-    opacity: 1;
-    pointer-events: auto;
-  }
-  .pageInfo { display: none; }
-  #viewerContainer { padding: 16px 10px; }
+    h1{
+        font-size:20px;
+    }
 }
