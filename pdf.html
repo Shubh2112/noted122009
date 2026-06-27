@@ -1,140 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Noted · PDF Viewer</title>
-<link rel="stylesheet" href="pdf.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Psychology of Money</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- ================================
-     TOOLBAR
-================================ -->
-<header class="topbar">
+<div class="bg-animation"></div>
 
-  <button id="toggleSidebar" title="Toggle sidebar">☰</button>
+<div class="container">
+    <div class="card">
 
-  <div class="pageInfo">
-    <input type="number" id="currentPage" value="1" min="1">
-    <span style="color:var(--text-muted)">/</span>
-    <span id="totalPages">—</span>
-  </div>
+        <div class="pdf-icon">📚</div>
 
-  <div class="zoomBox">
-    <button id="zoomOut" title="Zoom out">−</button>
-    <span id="zoomPercent">100%</span>
-    <button id="zoomIn" title="Zoom in">+</button>
-  </div>
+        <span class="badge">PDF Document</span>
 
-  <div class="toolbarButtons">
-    <button id="editBtn"   title="Annotation tools" disabled>✏️ Edit</button>
-    <button id="undoBtn"   title="Undo (Ctrl+Z)"   disabled>↶</button>
-    <button id="redoBtn"   title="Redo (Ctrl+Y)"   disabled>↷</button>
-    <button id="eraserBtn" title="Eraser"           disabled>🧽</button>
-    <button id="saveBtn"   title="Save page (Ctrl+S)" disabled>💾 Save</button>
-    <button id="shaBtn"    title="SHA-256 Generator">SHA</button>
-  </div>
+        <h1>The Psychology of Money.pdf</h1>
 
-</header>
+        <p>
+            Learn timeless lessons about wealth, investing,
+            financial decisions, and human behavior.
+        </p>
 
-<!-- ================================
-     MAIN WORKSPACE
-================================ -->
-<div class="workspace">
+        <a id="pdfLink" target="_blank">
+            View PDF Link
+        </a>
 
-  <!-- SIDEBAR -->
-  <aside id="sidebar">
-    <div class="sidebarHeader">
-      <h3>Pages</h3>
+        <button id="openBtn">
+            📖 Open
+        </button>
+
     </div>
-    <div id="thumbnailContainer"></div>
-  </aside>
-
-  <!-- PDF VIEWER -->
-  <main id="viewerContainer">
-    <div id="pdfViewer"></div>
-  </main>
-
 </div>
 
-<!-- ================================
-     EDIT POPUP
-================================ -->
-<div id="editPopup" class="popup hidden">
-  <div class="popupHeader">
-    <h3>Annotation Tools</h3>
-    <button id="closeEdit">✕</button>
-  </div>
-  <div class="popupBody">
-
-    <div class="toolGrid">
-      <button class="toolBtn" id="highlightYellow">
-        <span class="hl-dot" style="background:#fde047;"></span> Yellow
-      </button>
-      <button class="toolBtn" id="highlightGreen">
-        <span class="hl-dot" style="background:#4ade80;"></span> Green
-      </button>
-      <button class="toolBtn" id="highlightBlue">
-        <span class="hl-dot" style="background:#60a5fa;"></span> Blue
-      </button>
-      <button class="toolBtn" id="highlightPink">
-        <span class="hl-dot" style="background:#f472b6;"></span> Pink
-      </button>
-    </div>
-
-    <hr>
-
-    <div class="toolGrid">
-      <button class="toolBtn full" id="drawTool">✏️ &nbsp;Freehand Draw</button>
-      <button class="toolBtn full" id="textTool">📝 &nbsp;Add Text</button>
-    </div>
-
-  </div>
-</div>
-
-<!-- ================================
-     SHA POPUP
-================================ -->
-<div id="shaPopup" class="popup hidden">
-  <div class="popupHeader">
-    <h3>SHA-256 Generator</h3>
-    <button id="closeSha">✕</button>
-  </div>
-  <div class="popupBody">
-    <input type="text" id="shaInput" placeholder="Enter text to hash…">
-    <button id="generateHash">Generate Hash</button>
-    <div id="hashResult" style="display:none"></div>
-  </div>
-</div>
-
-<!-- ================================
-     SAVE STATUS TOAST
-================================ -->
-<div id="saveStatus" class="hidden"></div>
-
-<!-- ================================
-     LOADING SCREEN
-================================ -->
-<div id="loadingScreen">
-  <div class="loader">
-    <div class="loader-ring"></div>
-    <span class="loader-text">Loading…</span>
-  </div>
-</div>
-
-<!-- ================================
-     OVERLAY BACKDROP
-================================ -->
-<div id="overlay" class="hidden"></div>
-
-<!-- Hidden stacks (legacy compatibility) -->
-<div id="undoStack"   hidden></div>
-<div id="redoStack"   hidden></div>
-<div id="sessionData" hidden></div>
-
-<script src="pdf.js"></script>
-
+<script src="app.js"></script>
 </body>
 </html>
