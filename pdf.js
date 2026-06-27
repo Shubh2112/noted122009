@@ -1,7 +1,6 @@
-const PDF_URL = "https://drive.google.com/file/d/1ePQYKfgBU5SNODrPFRuV6uiLTVo2Wpr8/view?usp=sharing";
+document.getElementById("openBtn").addEventListener("click", () => {
 
-const openBtn = document.getElementById("openBtn");
+    window.location.href =
+    "https://drive.google.com/file/d/1ePQYKfgBU5SNODrPFRuV6uiLTVo2Wpr8/preview";
 
-openBtn.addEventListener("click", () => {
-    window.open(PDF_URL, "_blank");
 });
