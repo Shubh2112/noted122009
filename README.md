@@ -1,5 +1,5 @@
 # Noted
-shubh2112.github.io/noted-main/
+https://shubh2112.github.io/noted122009/
 
 # 📚 Personal PDF Viewer
 This is a personal-use website. It contains only one PDF book for my own reading purpose.
