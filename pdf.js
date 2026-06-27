@@ -1,5 +1,5 @@
 const PDF_URL =
-"https://drive.google.com/file/d/1ePQYKfgBU5SNODrPFRuV6uiLTVo2Wpr8/preview";
+"https://drive.google.com/file/d/1ePQYKfgBU5SNODrPFRuV6uiLTVo2Wpr8/view";
 
 const openBtn = document.getElementById("openBtn");
 
